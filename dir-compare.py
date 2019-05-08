@@ -80,7 +80,7 @@ class FileWorker(object):
 
       return ret
 
-  def __init__(self, rootdir, objdir):
+  def __init__(self, objdir):
     self.cousins = dict()
     self.similarities = dict()
 
@@ -225,9 +225,9 @@ class DirDiffFrame(wx.Frame):
     self.tree.AddColumn('Comment')
 
     obja = DirectoryObject.listDir(origin)
-    worka = FileWorker(origin, obja)
+    worka = FileWorker(obja)
     objb = DirectoryObject.listDir(refer)
-    workb = FileWorker(refer, objb)
+    workb = FileWorker(objb)
 
     def listdir(dirname):
       if dirname and os.path.exists(dirname):
