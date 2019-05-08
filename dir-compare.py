@@ -274,10 +274,10 @@ class DirDiffFrame(wx.Frame):
         elif len(flag) == 1:
           if flag == 'L':
             worker = workb
-            excluded.append(fb[len(rroot) + 1:])
+            excluded.append(fb[len(rroot):])
           else:
             worker = worka
-            excluded.append(fa[len(lroot) + 1:])
+            excluded.append(fa[len(lroot):])
 
           files, cousins, sincerity = worker.get(item)
           if files:
