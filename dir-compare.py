@@ -67,6 +67,18 @@ class FileWorker(object):
 
       self.cousins = list()
 
+    def __repr__(self):
+      ret = 'name: ' + self.name + ', fullname: ' + self.filename
+      if self.linkto:
+        ret += ', linkto: ' + self.linkto
+      ret += ', dir:' + self.dirname
+      if self.cousins:
+        ret += ', cousins: [%s]' % ','.join([f.name for f in self.cousins])
+      if self.sincerity != self.name:
+        ret += ', sincerity: ' + self.sincerity
+
+      return ret
+
   def __init__(self, rootdir, objdir):
     self.cousins = dict()
     self.similarities = dict()
