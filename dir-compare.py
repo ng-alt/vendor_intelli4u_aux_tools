@@ -96,9 +96,6 @@ class FileWorker(object):
 
         self.files[fname].append(item)
 
-    #print 'CU:', self.cousins
-    #print 'SIMILAR:', self.similarities
-
   def get(self, name):
     return self.files.get(name), self.cousins.get(name), self.similarities.get(name)
 
