@@ -245,11 +245,25 @@ class DirDiffFrame(wx.Frame):
         fa = os.path.join(left, item)
         fb = os.path.join(right, item)
 
-        flag = ''
+        alls, flag, excluded = [], '', [item]
+
+        if objL:
+          excluded.append(os.path.join(objL.name, item))
+        if objR:
+          excluded.append(os.path.join(objR.name, item))
+
         if os.path.lexists(fa):
           flag += 'L'
+          files, _, _ = worka.get(item)
+          if files:
+            alls.extend(['@' + f.linkto for f in files if f.linkto])
+
         if os.path.lexists(fb):
           flag += 'R'
+          excluded.append(os.path.join(objR.name, item))
+          files, _, _ = workb.get(item)
+          if files:
+            alls.extend(['@' + f.linkto for f in files if f.linkto])
 
         self.tree.SetItemText(child, flag, 1)
         if os.path.isdir(fa) or os.path.isdir(fb):
@@ -258,7 +272,6 @@ class DirDiffFrame(wx.Frame):
             lroot, fa, objL and objL.dirs.get(item),
             rroot, fb, objR and objR.dirs.get(item))
         elif len(flag) == 1:
-          alls, excluded = [], [item]
           if flag == 'L':
             worker = workb
             excluded.append(fb[len(rroot) + 1:])
