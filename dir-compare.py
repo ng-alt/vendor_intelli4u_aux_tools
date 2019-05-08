@@ -14,8 +14,9 @@ from collections import namedtuple
 
 
 class DirectoryObject(object):
-  def __init__(self, name, dirs, files):
+  def __init__(self, name, rootdir, dirs, files):
     self.name = os.path.basename(name)
+    self.rootdir = rootdir
     self.files = files
     self.dirs = dict()
     for name in dirs:
@@ -32,7 +33,7 @@ class DirectoryObject(object):
 
     _walk(objs, self)
     for obj in objs:
-      yield obj.name, obj.dirs.keys(), obj.files
+      yield obj.rootdir, obj.dirs.keys(), obj.files
 
   def listdir(self):
     return self.files + self.dirs.keys()
@@ -42,7 +43,7 @@ class DirectoryObject(object):
     info = dict()
     for rootdir, dirs, files in os.walk(dirname):
       name = rootdir.replace(dirname, '').lstrip('/')
-      info[name] = DirectoryObject(name, dirs, files)
+      info[name] = DirectoryObject(name, rootdir, dirs, files)
 
     def updateRecursively(root, item):
       if item:
