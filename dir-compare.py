@@ -59,16 +59,13 @@ class DirectoryObject(object):
 
 class FileWorker(object):
   class FileItem(object):
-    def __init__(self, filename):
+    def __init__(self, filename, linkto=None):
       self.filename = filename
+      self.linkto = linkto
       self.dirname = os.path.dirname(filename)
       self.sincerity = self.name = os.path.basename(filename)
 
       self.cousins = list()
-      if os.path.islink(filename):
-        self.linkto = os.path.readlink(filename)
-      else:
-        self.linkto = None
 
   def __init__(self, rootdir, objdir):
     self.cousins = dict()
@@ -78,7 +75,8 @@ class FileWorker(object):
     for root, dirs, files in objdir.walk():
       for fname in files:
         item = self.aggregate(
-          rootdir, self.similarities, self.cousins, os.path.join(root, fname))
+          root, self.similarities, self.cousins,
+          os.path.join(root, fname).replace(objdir.rootdir, '').lstrip('/'))
 
         if fname not in self.files:
           self.files[fname] = list()
@@ -92,8 +90,11 @@ class FileWorker(object):
     return self.files.get(name), self.cousins.get(name), self.similarities.get(name)
 
   @staticmethod
-  def aggregate(rootdir, similarities, cousins, fullname):
-    fi = FileWorker.FileItem(fullname)
+  def aggregate(rootdir, similarities, cousins, name):
+    """rootdir is the file directory, name is relative to "root", not rootdir."""
+    fullname = os.path.join(rootdir, os.path.basename(name))
+    fi = FileWorker.FileItem(name,
+      linkto=os.readlink(fullname) if os.path.islink(fullname) else None)
 
     # try analyzing file name with names
     if fi.name.find('.so') > 0:
@@ -113,8 +114,7 @@ class FileWorker(object):
           if not name.endswith('.so'):
             name += '.so'
 
-          name = os.path.join(os.path.dirname(fullname), name)
-          if os.path.lexists(os.path.join(rootdir, name)):
+          if os.path.lexists(os.path.join(os.path.dirname(fullname), name)):
             fi.sincerity = name
 
         break
