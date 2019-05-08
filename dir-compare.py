@@ -280,20 +280,14 @@ class DirDiffFrame(wx.Frame):
             excluded.append(fa[len(lroot):])
 
           files, cousins, sincerity = worker.get(item)
-          if files:
-            for f in files:
-              if f.sincerity:
-                alls.append(f.sincerity)
-              if f.linkto:
-                alls.append('@' + f.linkto)
           if cousins:
             alls.extend([f.filename for f in cousins])
           if sincerity:
             alls.extend([f.filename for f in sincerity])
 
-          if len(alls):
-            self.tree.SetItemText(
-              child, ', '.join(set(alls) - set(excluded)), 2)
+        if len(alls):
+          self.tree.SetItemText(
+            child, ', '.join(sorted(set(alls) - set(excluded))), 2)
 
     UpdateTree(
       self.tree.AddRoot(origin), origin, origin, obja, refer, refer, objb)
