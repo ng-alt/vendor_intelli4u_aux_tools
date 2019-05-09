@@ -283,6 +283,7 @@ class DirDiffFrame(wx.Frame):
           self.tree.SetItemText(
             child, ', '.join(sorted(set(alls) - set(excluded))), 2)
 
+    self.tree.DeleteRoot()
     UpdateTree(
       self.tree.AddRoot(origin), origin, origin, obja, refer, refer, objb)
 
