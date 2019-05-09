@@ -209,14 +209,14 @@ class DirDiffFrame(wx.Frame):
     wx.EVT_MENU(self, wx.ID_EXIT, self.OnCmd_Exit)
 
     self.tree = gizmos.TreeListCtrl(self, -1, style=wx.TR_DEFAULT_STYLE|wx.TR_FULL_ROW_HIGHLIGHT)
+    self.tree.AddColumn('Mixed', width=300)
+    self.tree.AddColumn('LR', width=50)
+    self.tree.AddColumn('Comment', width=500)
+
     if len(args) > 0 and len(args[0]) > 1:
       wx.CallAfter(self.UpdateView, args[0][0], args[0][1])
 
   def UpdateView(self, origin, refer):
-    # TODO: clean tree
-    self.tree.AddColumn('Mixed')
-    self.tree.AddColumn('LR')
-    self.tree.AddColumn('Comment')
 
     obja = DirectoryObject.listDir(origin)
     worka = FileWorker(obja)
