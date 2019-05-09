@@ -5,10 +5,7 @@ import re
 import sys
 import wx
 
-try:
-  from agw import hypertreelist as HTL
-except ImportError:
-  import wx.lib.agw.hypertreelist as HTL
+import wx.gizmos as gizmos
 
 from collections import namedtuple
 
@@ -211,7 +208,7 @@ class DirDiffFrame(wx.Frame):
     wx.EVT_MENU(self, wx.ID_FILE, self.OnCmd_File)
     wx.EVT_MENU(self, wx.ID_EXIT, self.OnCmd_Exit)
 
-    self.tree = HTL.HyperTreeList(self, agwStyle=wx.TR_HAS_BUTTONS | wx.TR_HAS_VARIABLE_ROW_HEIGHT)
+    self.tree = gizmos.TreeListCtrl(self, -1, style=wx.TR_DEFAULT_STYLE|wx.TR_FULL_ROW_HIGHLIGHT)
     if len(args) > 0 and len(args[0]) > 1:
       wx.CallAfter(self.UpdateView, args[0][0], args[0][1])
 
