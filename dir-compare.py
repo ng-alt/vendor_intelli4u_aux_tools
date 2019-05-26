@@ -284,8 +284,10 @@ class DirDiffFrame(wx.Frame):
             child, ', '.join(sorted(set(alls) - set(excluded))), 2)
 
     self.tree.DeleteRoot()
-    UpdateTree(
-      self.tree.AddRoot(origin), origin, origin, obja, refer, refer, objb)
+
+    root = self.tree.AddRoot(origin)
+    self.tree.SetItemText(root, refer, 2)
+    UpdateTree(root, origin, origin, obja, refer, refer, objb)
 
   def OnCmd_File(self, event):
     dialog = DirSelectionDialog(self, "Set directories")
